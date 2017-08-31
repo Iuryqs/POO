@@ -10,9 +10,6 @@ T read(){
     return t;
 }
 
-
-
-
 struct Operacao{
     string descricao;
     float valor;
@@ -46,7 +43,7 @@ public:
             return false;
 
         this->saldo -= valor;
-        this->extrato.push_back(Operacao("Saque: ", valor));
+        this->extrato.push_back(Operacao("Saque: -", valor));
 
         return true;
     }
@@ -56,13 +53,12 @@ public:
             return false;
 
         this->saldo += valor;
-        this->extrato.push_back(Operacao("Deposito: ", valor));
+        this->extrato.push_back(Operacao("Deposito: +", valor));
         return true;
     }
     vector<Operacao> getExtrato(){
         return this->extrato;
     }
-
 };
 
 int main(){
@@ -95,7 +91,6 @@ int main(){
             cout << (conta.saque(read<float>())? "ok" : "erro") << endl;
         }
         if(op == "extrato"){
-            // vector<Operacao> extrato = conta.getExtrato();
             for(auto operacao : conta.getExtrato()){
                 cout << operacao.descricao << operacao.valor << endl;
             }
@@ -103,10 +98,5 @@ int main(){
 
 
     }
-
-
-
-
-
 
 }
