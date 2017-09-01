@@ -49,20 +49,23 @@ public:
         return troco;
     }
 
-    bool alterarProduto(int indice, string nome, int qtd, float valor){
-        if((indice > (int)espirais.size()) || (nome == "") || (qtd <= 0) || (valor <= 0) || (qtd > this->maxPro)){
-            return false;
+    int alterarProduto(int indice, string nome, int qtd, float valor){
+        if((indice > (int)espirais.size()) || (nome == "") || (qtd <= 0) || (valor <= 0)){
+            return 0;
+        }
+        if((qtd > this->maxPro)){
+            return 1;
         }
         espirais[indice].nome = nome;
         espirais[indice].qtd = qtd;
         espirais[indice].value = valor;
-            return true;
+            return 2;
     }
 
 
-    int vender(int indice){
+    string vender(int indice){
         if(indice > (int)espirais.size()){
-            return 1;
+            return "1";
         }
 
         if(espirais[indice].qtd > 0){
@@ -70,12 +73,12 @@ public:
                 espirais[indice].qtd -= 1;
                 this->saldoCliente -= espirais[indice].value;
                 this->lucro += espirais[indice].value;
-                return 0;
+                return espirais[indice].nome;
             }else {
-                return 2;
+                return "2";
             }
         }else
-            return 1;
+            return "1";
 
     }
 
@@ -151,20 +154,24 @@ int main(){
             int qtd;
             float valor;
             cin >> indice; cin >> nome; cin >> qtd; cin >> valor;
-            cout << (maquina.alterarProduto(indice, nome, qtd, valor)? "ok" : "erro") << endl;
+            if((maquina.alterarProduto(indice, nome, qtd, valor) == 0))
+               cout << "erro(valores invalidos)" << endl;
+            if((maquina.alterarProduto(indice, nome, qtd, valor) == 1))
+               cout << "erro(quantidade maior q permitido)" << endl;
+            if((maquina.alterarProduto(indice, nome, qtd, valor) == 2))
+               cout << "ok" << endl;
         }
 
         if(op == "comprar"){
             int indice;
             cin >> indice;
-            if(maquina.vender(indice) == 0){
-                cout << "ok" << endl;
-            }
-            else if(maquina.vender(indice) == 1){
+            if(maquina.vender(indice) == "1"){
                 cout << "erro(produto nao existe)" << endl;
             }
-            else    if(maquina.vender(indice) == 2){
+            else    if(maquina.vender(indice) == "2"){
                 cout << "erro(valor insuficiente)" << endl;
+            }else{
+                cout << maquina.vender(indice) << endl;
             }
         }
 
