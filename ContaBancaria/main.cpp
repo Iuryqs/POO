@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <sstream>
+
 using namespace std;
 
 
@@ -59,6 +61,16 @@ public:
     vector<Operacao> getExtrato(){
         return this->extrato;
     }
+
+    string extratoN(int valor){
+        stringstream ss;
+        int tamanho = (int)(extrato.size() - valor);
+        for(; tamanho < (int)extrato.size(); tamanho++){
+            ss << extrato[tamanho].descricao << " " << extrato[tamanho].valor << endl;
+        }
+        return ss.str();
+
+    }
 };
 
 int main(){
@@ -75,6 +87,7 @@ int main(){
                  << "saque _valor" << endl
                  << "deposito _valor" << endl
                  << "extrato" << endl
+                 << "UltimoExtrato _valor" << endl
                  << "fim" << endl;
         }
 
@@ -94,6 +107,12 @@ int main(){
             for(auto operacao : conta.getExtrato()){
                 cout << operacao.descricao << operacao.valor << endl;
             }
+            cout << "Saldo Atual: " << conta.getSaldo();
+        }
+        if(op == "UltimoExtrato"){
+            int valor;
+            cin >> valor;
+            cout << conta.extratoN(valor);
         }
 
 

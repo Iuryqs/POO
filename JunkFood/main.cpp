@@ -21,11 +21,13 @@ public:
     vector<Espiral> espirais;
     float saldoCliente{0.0f};
     float lucro{0};
+    int maxPro;
 
-    Maquina(int qtd = 0, float saldoCliente = 0.0f){
-        this->saldoCliente = saldoCliente;
+    Maquina(int qtd = 0, int maxPro = 0){
         for(int i = 0; i < qtd; i++)
             espirais.push_back(Espiral());
+
+        this->maxPro = maxPro;
     }
 
     bool receberDinheiro(float value){
@@ -48,7 +50,7 @@ public:
     }
 
     bool alterarProduto(int indice, string nome, int qtd, float valor){
-        if((indice > (int)espirais.size()) || (nome == "") || (qtd <= 0) || (valor <= 0)){
+        if((indice > (int)espirais.size()) || (nome == "") || (qtd <= 0) || (valor <= 0) || (qtd > this->maxPro)){
             return false;
         }
         espirais[indice].nome = nome;
@@ -76,6 +78,7 @@ public:
             return 1;
 
     }
+
 
     string mostrarStatus(){
         stringstream ss;
@@ -113,7 +116,7 @@ int main(){
                  << "inserir $valor" << endl
                  << "saldo" << endl
                  << "troco" << endl
-                 << "iniciar $qtd" << endl
+                 << "iniciar $qtd $maxQuantidade" << endl
                  << "alterarEspiral $ind $nome $qtd $valor" << endl
                  << "comprar &ind" << endl
                  << "status" << endl
@@ -135,9 +138,9 @@ int main(){
         }
 
         if(op == "iniciar"){
-            int valor;
-            cin >> valor;
-            maquina = Maquina(valor);
+            int valor, maxPro;
+            cin >> valor >> maxPro;
+            maquina = Maquina(valor, maxPro);
             inicializar(maquina);
             cout << "ok" << endl;
         }
