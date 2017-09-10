@@ -30,12 +30,15 @@ public:
     Conta(int id = 0){
         this->id = id;
     }
+
     float getSaldo(){
         return this->saldo;
     }
+
     int getId(){
         return this->id;
     }
+
     void setId(int id){
         this->id = id;
     }
@@ -58,6 +61,7 @@ public:
         this->extrato.push_back(Operacao("Deposito: +", valor));
         return true;
     }
+
     vector<Operacao> getExtrato(){
         return this->extrato;
     }
@@ -69,6 +73,56 @@ public:
             ss << extrato[tamanho].descricao << " " << extrato[tamanho].valor << endl;
         }
         return ss.str();
+
+    }
+
+    bool transferir(Conta conta, float valor){
+
+    }
+};
+
+class Cliente{
+private:
+    string cpf;
+    vector<Conta> contas;
+public:
+    Conta(string cpf = ""){
+        this->cpf = cpf;
+    }
+
+    int getCpf(){
+        return this->cpf;
+    }
+
+    void setCpf(int id){
+        this->cpf = cpf;
+    }
+
+    bool addConta(string numero){
+    }
+
+    bool encerrarConta(string numero){
+    }
+};
+
+class Agencia{
+private:
+    vector<Cliente> clientes;
+public:
+    Agencia(){
+    }
+
+    bool addCliente(string cpf){
+        for(auto cconta : contas){
+            if(cliente.cpf == cpf){
+                return false;
+            }else{
+
+            }
+        }
+    }
+
+    bool abrirConta(string cpf){
 
     }
 };
