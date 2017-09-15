@@ -75,56 +75,6 @@ public:
         return ss.str();
 
     }
-
-    bool transferir(Conta conta, float valor){
-
-    }
-};
-
-class Cliente{
-private:
-    string cpf;
-    vector<Conta> contas;
-public:
-    Conta(string cpf = ""){
-        this->cpf = cpf;
-    }
-
-    int getCpf(){
-        return this->cpf;
-    }
-
-    void setCpf(int id){
-        this->cpf = cpf;
-    }
-
-    bool addConta(string numero){
-    }
-
-    bool encerrarConta(string numero){
-    }
-};
-
-class Agencia{
-private:
-    vector<Cliente> clientes;
-public:
-    Agencia(){
-    }
-
-    bool addCliente(string cpf){
-        for(auto cconta : contas){
-            if(cliente.cpf == cpf){
-                return false;
-            }else{
-
-            }
-        }
-    }
-
-    bool abrirConta(string cpf){
-
-    }
 };
 
 int main(){
@@ -142,6 +92,8 @@ int main(){
                  << "deposito _valor" << endl
                  << "extrato" << endl
                  << "UltimoExtrato _valor" << endl
+                 << "addCli $cpf" << endl
+                 << "abrirConta $cpf" << endl
                  << "fim" << endl;
         }
 
@@ -161,15 +113,13 @@ int main(){
             for(auto operacao : conta.getExtrato()){
                 cout << operacao.descricao << operacao.valor << endl;
             }
-            cout << "Saldo Atual: " << conta.getSaldo();
+            cout << "Saldo Atual: " << conta.getSaldo() << endl;
         }
         if(op == "UltimoExtrato"){
             int valor;
             cin >> valor;
             cout << conta.extratoN(valor);
         }
-
-
     }
 
 }
