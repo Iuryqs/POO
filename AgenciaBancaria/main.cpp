@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <sstream>
+#include <algorithm>
 
 using namespace std;
 
@@ -23,11 +24,11 @@ struct Operacao{
 class Conta{
 private:
     int id;
-    bool ativa;
+    bool ativa{true};
     float saldo{0};
     vector<Operacao> extrato;
 public:
-    Conta(int id = 0, bool ativa = true){
+    Conta(int id = 0){
         this->id = id;
     }
 
@@ -39,7 +40,7 @@ public:
         return this->ativa;
     }
 
-    void getAtiva(bool ativa){
+    void setAtiva(bool ativa){
         this->ativa = ativa;
     }
 
@@ -51,30 +52,34 @@ public:
         this->id = id;
     }
 
-    bool saque(float valor){
-        if((this->saldo < valor) || (valor < 0))
+    bool sacar(float valor){
+        if((this->saldo < valor) && (valor <= 0))
             return false;
 
         this->saldo -= valor;
-        this->extrato.push_back(Operacao("Saque: -", valor));
+        this->extrato.push_back(Operacao("saque: -", valor));
 
         return true;
     }
 
-    bool deposito(float valor){
+    bool depositar(float valor){
         if(valor < 1)
             return false;
 
         this->saldo += valor;
-        this->extrato.push_back(Operacao("Deposito: +", valor));
+        this->extrato.push_back(Operacao("deposito: +", valor));
         return true;
     }
 
-    vector<Operacao> getExtrato(){
-        return this->extrato;
+    string getExtrato(){
+        stringstream ss;
+        for(Operacao e: extrato){
+            ss << e.descricao << e.valor << endl;
+        }
+        return ss.str();
     }
 
-    string extratoN(int valor){
+    string getExtratoN(int valor){
         stringstream ss;
         int tamanho = (int)(extrato.size() - valor);
         for(; tamanho < (int)extrato.size(); tamanho++){
@@ -104,29 +109,115 @@ public:
         contas.push_back(numero);
         return true;
     }
+    vector<Conta>& getConta(){
+        return this->contas;
+    }
 
     int encerrarConta(int numero){
-        for(int i = 1; i < (int) contas.size(); i++){
+        for(int i = 0; i <= (int) contas.size(); i++){
             if(numero == contas[i].getId()){
                 if(contas[i].getSaldo() > 0){
-                    if(contas[i].getAtiva() == true){
-                        contas[i].getAtiva(false);
-                        return contas[i].getId();
-                    }
+                    return -2;
+                }
+
+                if(contas[i].getAtiva() == false){
                     return -3;
                 }
-                return -2;
+
+                contas[i].setAtiva(false);
+                return contas[i].getId();
             }
         }
         return -1;
     }
+
+    string saldo(int conta){
+        stringstream ss;
+        for(Conta c : contas){
+                 if(c.getId() ==  conta){
+                     if(c.getAtiva() == true){
+                        ss << "saldo: " << c.getSaldo();
+                        return ss.str();
+                     }else
+                        return "conta encerrada";
+                }
+        }
+        ss << "conta inválida";
+        return ss.str();
+    }
+
+    bool saque(int conta,float valor){
+        for(Conta& c : contas){
+            if(c.getId() == conta){
+                if(c.getAtiva() == true)
+                    return c.sacar(valor);
+                else
+                    return false;
+            }
+        }
+    }
+
+    bool deposito(int conta, float valor){
+        for(Conta& c : contas){
+            if(c.getId() == conta){
+                if(c.getAtiva() == true)
+                    return c.depositar(valor);
+                else
+                    return false;
+            }
+        }
+    }
+
+    string extrato(int conta){
+        stringstream ss;
+        for(Conta c : contas){
+            if(conta == c.getId()){
+                if(c.getAtiva() == true){
+                    ss << "extrato:" << endl << c.getExtrato() << endl;
+                    return ss.str();
+                }else
+                    return "conta encerrada";
+            }
+        }
+
+    }
+
+    string extratoN(int conta, int n){
+        stringstream ss;
+        for(Conta c : contas){
+            if(conta == c.getId()){
+                if(c.getAtiva() == true){
+                    ss << "extratoN:" << endl << c.getExtratoN(n) << endl;
+                    return ss.str();
+                }else
+                    return "conta encerrada";
+            }
+        }
+    }
+
 };
 
+bool comparaNome(Cliente x, Cliente y){
+    return x.getCpf() < y.getCpf();
+}
+
 class Agencia{
+private:
+    vector<Cliente> clientes;
 public:
     int numeroConta = 0;
-    vector<Cliente> clientes;
+    vector<Conta> contas;
+
     Agencia(){
+    }
+
+    Cliente * Login(string cpf){
+        for(Cliente& c : clientes){
+            if(c.getCpf() == cpf){
+                return &c;
+            }
+        }
+        return nullptr;
     }
 
     bool addCliente(string cpf){
@@ -147,60 +238,87 @@ public:
                 numeroConta += 1;
                 return numeroConta - 1;
             }
-            return -1;
         }
+        return -1;
     }
+
+    string showAllCli(){
+        stringstream ss;
+        int enumerador = 1;
+        std::sort(clientes.begin(), clientes.end(), comparaNome);
+        for(Cliente c : clientes){
+            contas = c.getConta();
+            vector<int> contasAtivas;
+            for(Conta c1 : contas){
+                if(c1.getAtiva())
+                    contasAtivas.push_back(c1.getId());
+            }
+            ss << enumerador << " cpf: " << c.getCpf() << " contas: ";
+            for(Conta c2 : contasAtivas)
+                ss << c2.getId() << " ";
+            ss << endl;
+            enumerador += 1;
+        }
+        return ss.str();
+    }
+
+    string show(string cpf){
+        stringstream ss;
+        float saldoTotal = 0;
+        ss << "Cliente: " << cpf << endl;
+        for(Cliente c : clientes){
+            if(c.getCpf() == cpf){
+                contas = c.getConta();
+                for(Conta c2 : contas){
+                    saldoTotal += c2.getSaldo();
+                    ss << "Conta: " << c2.getId() << ", "
+                       << "Saldo: " << c2.getSaldo() << ", "
+                       << "Status: " << (c2.getAtiva()? "ativa" : "encerrada") << endl;
+                }
+                ss << "Saldo Total: " << saldoTotal << endl;
+                return ss.str();
+             }
+
+        }
+        return "cliente não logado";
+    }
+
 };
 
+
+void inicializar(Agencia& agencia){
+    agencia.addCliente("111");
+    agencia.abrirConta("111");
+    agencia.abrirConta("111");
+    agencia.addCliente("222");
+    agencia.abrirConta("222");
+    agencia.addCliente("333");
+    agencia.abrirConta("333");
+}
+
 int main(){
-    Conta conta;
     Agencia agencia;
-    Cliente cliente;
+    Cliente * cliente = nullptr;
+    inicializar(agencia);
     string op;
     cout << "digite help" << endl;
     while(op != "fim"){
         cin >> op;
 
         if(op == "help"){
-            cout /*<< "iniciar _id" << endl
-                 << "saldo" << endl
-                 << "saque _valor" << endl
-                 << "deposito _valor" << endl
-                 << "extrato" << endl
-                 << "UltimoExtrato _valor" << endl*/
-                 << "addCli $cpf" << endl
+            cout << "addCli $cpf" << endl
                  << "abrirConta $cpf" << endl
                  << "encerrarConta $conta" << endl
+                 << "login $cpf" << endl
+                 << "logout" << endl
+                 << "showAllCli" << endl
+                 << "show" << endl
+                 << "saldo $conta" << endl
+                 << "saque $conta $valor" << endl
+                 << "deposito $conta $valor" << endl
+                 << "extrato $conta" << endl
+                 << "extratoN $conta $qtd" << endl
                  << "fim" << endl;
-        }
-
-        if(op == "iniciar"){
-            conta = Conta(read<int>());
-        }
-
-        if(op == "saldo"){
-            cout << conta.getSaldo() << endl;
-        }
-
-        if(op == "deposito"){
-            cout << (conta.deposito(read<float>())? "ok" : "erro") << endl;
-        }
-
-        if(op == "saque"){
-            cout << (conta.saque(read<float>())? "ok" : "erro") << endl;
-        }
-
-        if(op == "extrato"){
-            for(auto operacao : conta.getExtrato()){
-                cout << operacao.descricao << operacao.valor << endl;
-            }
-            cout << "Saldo Atual: " << conta.getSaldo() << endl;
-        }
-
-        if(op == "UltimoExtrato"){
-            int valor;
-            cin >> valor;
-            cout << conta.extratoN(valor);
         }
 
         if(op == "addCli"){
@@ -208,7 +326,7 @@ int main(){
         }
 
         if(op == "abrirConta"){
-            int aux= agencia.abrirConta(read<string>());
+            int aux = agencia.abrirConta(read<string>());
             if(aux == -1){
                 cout << "erro" << endl;
             }else{
@@ -218,19 +336,114 @@ int main(){
         }
 
         if(op == "encerrarConta"){
-            int aux = cliente.encerrarConta(read<int>());
-            if(aux < 0){
-                if(aux == -1)
-                    cout << "conta invalida" << endl;
-                if(aux == -2)
-                    cout << "saldo positivo" << endl;
-                if(aux == -3)
-                    cout << "conta ja esta encerrada" << endl;
-            }else{
-                cout << "conta " << aux << " encerrada" << endl;
+            if(cliente == nullptr)
+                cout << "nenhum cliente logado" << endl;
+            else{
+                int aux = cliente->encerrarConta(read<int>());
+                if(aux < 0){
+                    if(aux == -1)
+                        cout << "conta invalida" << endl;
+                    if(aux == -2)
+                        cout << "saldo positivo" << endl;
+                    if(aux == -3)
+                        cout << "conta ja esta encerrada" << endl;
+                }else{
+                    cout << "conta " << aux << " encerrada" << endl;
+                }
             }
+        }
+
+        if(op == "login"){
+            cliente = agencia.Login(read<string>());
+            if(cliente == nullptr)
+                cout << "cpf invalido" << endl;
+            else
+                cout << "ok" << endl;
+        }
+
+        if(op == "logout"){
+            if(cliente == nullptr){
+                cout << "nenhum cliente logado" << endl;
+            }else{
+                cliente = nullptr;
+                cout << "ok" << endl;
+            }
+        }
+
+        if(op == "showAllCli")
+            cout << agencia.showAllCli();
+
+        if(op == "show"){
+            if(cliente == nullptr)
+                cout << "cliente não logado" << endl;
+            else
+                cout << agencia.show(cliente->getCpf());
+        }
+
+        if(op == "saldo"){
+            if(cliente == nullptr)
+                cout << "nenhum cliente logado" << endl;
+            else
+                cout << cliente->saldo(read<int>());
+        }
+
+        if(op == "saque"){
+            int x;
+            cin >> x;
+            float y;
+            cin >> y;
+            bool aux = cliente->saque(x,y);
+            if(cliente == nullptr)
+                cout << "nunhum cliente logado" << endl;
+            else
+                cout << (aux? "ok" : "erro") << endl;
+        }
+
+        if(op == "deposito"){
+            int x;
+            cin >> x;
+            float y;
+            cin >> y;
+            bool aux = cliente->deposito(x,y);
+            if(cliente == nullptr)
+                cout << "nunhum cliente logado" << endl;
+            else
+                cout << (aux? "ok" : "erro") << endl;
+        }
+
+        if(op == "extrato"){
+            if(cliente == nullptr)
+                cout << "nunhum cliente logado" << endl;
+            else
+                cout << cliente->extrato(read<int>());
+        }
+
+        if(op == "extratoN"){
+            int x;
+            cin >> x;
+            int y;
+            cin >> y;
+            string aux = cliente->extratoN(x, y);
+            if(cliente == nullptr)
+                cout << "nunhum cliente logado" << endl;
+            else
+                cout << aux;
         }
 
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
