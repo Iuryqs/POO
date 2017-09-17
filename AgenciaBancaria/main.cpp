@@ -89,9 +89,11 @@ public:
 
     }
 
-//    bool transferir(Conta conta, float valor){
-
-//    }
+    void transferir(int conta, float valor, string x){
+        stringstream ss;
+        ss << "transferência " << x << conta << " no valor de ";
+        this->extrato.push_back(Operacao(ss.str(), valor));
+    }
 };
 
 class Cliente{
@@ -282,7 +284,64 @@ public:
         }
         return "cliente não logado";
     }
-
+    bool transf(int conta, int outra, float valor){
+        vector<Conta> aux;
+        vector<int> n;
+        vector<string> cpf;
+        bool cont1 = false;
+        bool cont2 = false;
+        for(Cliente c1 : clientes){
+            aux = c1.getConta();
+            for(Conta c2 : aux)
+                n.push_back(c2.getId());
+        }
+        for(int i = 0; i < (int) n.size(); i++){
+            if(n[i] == conta)
+                cont1 = true;
+            if(n[i] == outra)
+                cont2 = true;
+        }
+        if((cont1 == false) || (cont2 == false))
+            return false;
+        for(Cliente c3 : clientes){
+            vector<Conta> contas = c3.getConta();
+            for(Conta c4 : contas){
+                if(c4.getId() == conta){
+                    if(c4.getAtiva() == false)
+                        return false;
+                    else
+                        cpf.push_back(c3.getCpf());
+                }
+                if(c4.getId() == outra){
+                    if(c4.getAtiva() == false)
+                        return false;
+                    else
+                        cpf.push_back(c3.getCpf());
+                }
+            }
+        }
+        for(Cliente& c5 : clientes){
+            if(c5.getCpf() == cpf[0]){
+                for(Conta& c6 : c5.getConta()){
+                    if(c6.getId() == conta){
+                        if(valor > c6.getSaldo())
+                            return false;
+                        c6.sacar(valor);
+                        c6.transferir(outra, valor, "para ");
+                    }
+                }
+            }
+            if(c5.getCpf() == cpf[1]){
+                for(Conta& c7 : c5.getConta()){
+                    if(c7.getId() == outra){
+                        c7.sacar(-1 * valor);
+                        c7.transferir(conta, valor, "de ");
+                    }
+                }
+            }
+        }
+        return true;
+    }
 };
 
 
@@ -318,6 +377,7 @@ int main(){
                  << "deposito $conta $valor" << endl
                  << "extrato $conta" << endl
                  << "extratoN $conta $qtd" << endl
+                 << "transf $contaDe $contaPara $valor" << endl
                  << "fim" << endl;
         }
 
@@ -428,6 +488,21 @@ int main(){
                 cout << "nunhum cliente logado" << endl;
             else
                 cout << aux;
+        }
+
+        if(op == "transf"){
+            int x;
+            cin >> x;
+            int y;
+            cin >> y;
+            float z;
+            cin >> z;
+            bool aux = agencia.transf(x, y, z);
+            if(cliente == nullptr)
+                cout << "nunhum cliente logado" << endl;
+            else{
+                cout << (aux? "ok" : "erro") << endl;
+            }
         }
 
     }
