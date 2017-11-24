@@ -118,7 +118,7 @@ public:
     void assertUser(string user){
         auto i = lista_reg.count(user);
         if(i == 0)
-            throw "O usuário não existe";
+            throw "O usuário não existe.";
 
     }
 
