@@ -143,16 +143,30 @@ public:
     }
 
     vector<Zap> getUnread(string userId){
-//        assertUser(userId);
-//        vector<Zap> aux;
-//        if(getUnreadCount(userId) == 0)
-//            throw "Nao existe mensagem para ler";
-//        for(auto i : lista_zap){
-//            if(i.userID == userId)
-//                aux.push_back(i.msg);
-//        }
+        assertUser(userId);
+        vector<Zap> retorno;
+        int x = (int) lista_zap.size();
+        int y = getUnreadCount(userId);
+        Registro &aux = lista_reg[userId];
+        if(!aux.getunreadCount()){
+            retorno.push_back(Zap("System", "Não tem mensagem"));
+            return retorno;
+        }
+        while(y > 0){
+            Zap aux = lista_zap[x - 1];
+            if(aux.getuserId() != userId){
+                retorno.push_back(aux);
+                y = y - 1;
+                x = x - 1;
+            }else{
+                retorno.push_back(aux);
+                x = x - 1;
+            }
+        }
 
+        aux.setunreadCount(0);
 
+        return retorno;
     }
 
     bool hasUser(string userId){
@@ -165,9 +179,6 @@ public:
         return this->chatId;
     }
 
-
-
-
     friend class User;
 
 };
@@ -177,7 +188,31 @@ string User::getOverview(){
     for(auto i : lista_chat)
         ss << "Chat: " << i.first << "[" << i.second->getUnreadCount(userId) << "]" << endl;
     return ss.str();
+
 }
 
+void User::invite(string chatId, User * user){
+    assertChat(chatId);
+    Chat * aux = lista_chat[chatId];
+    bool x = aux->hasUser(user->userId);
+    if(x == true)
+        return;
+    aux->lista_reg[user->userId] = Registro(user);
+    user->lista_chat[chatId] = aux;
+}
+
+void User::leave(string chatId){
+    assertChat(chatId);
+    Chat * aux = lista_chat[chatId];
+    aux->lista_reg.erase(this->userId);
+    lista_chat.erase(aux->chatId);
+}
+
+void User::sendZap(string mensagem, string chatId){
+    assertChat(chatId);
+    Chat * aux = lista_chat[chatId];
+    Zap msg = Zap(this->userId, mensagem);
+    aux->deliverZap(msg);
+}
 
 #endif // WHATSAPP_H

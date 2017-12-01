@@ -30,9 +30,9 @@ public:
                 continue;
             try {
                 string resp = this->process(line);
-                std::cout << poo::tab(resp, "-") << std::endl;
+                std::cout << poo::tab(resp, ".") << std::endl;
             } catch(const std::string& e) {
-                std::cout << poo::tab(e, "-") << std::endl;
+                std::cout << poo::tab(e, ".") << std::endl;
             }
         }
     }
