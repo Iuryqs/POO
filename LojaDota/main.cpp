@@ -8,10 +8,15 @@ using namespace std;
 using namespace poo;
 
 string HELP = R"(help
-addHeroi [nome]
-addItem [nome]
-showHerois
+addItem [nome] [valor]
 showItens
+dadosItem [nome]
+addHeroi [nome] [gold]
+showHerois
+dadosHeroi [nome]
+farmar [nome_do_heroi]
+comprarItem [nome_do_heroi] [nome_do_item]
+fim
 )";
 
 class Dota : public Controller{
@@ -28,21 +33,29 @@ public:
 
         if(cmd == "help")
             return HELP;
-        else if(cmd == "addHeroi"){
-            for(int i = 1; i < (int) ui.size(); i++){
-                heroi.add(ui[i],Heroi(ui[i]));
-            }
-        }
         else if(cmd == "addItem"){
-            for(int i = 1; i < (int) ui.size(); i++){
-                item.add(ui[i],Item(ui[i]));
-            }
+            item.add(ui[1], Item(ui[1], Int(ui[2])));
+        }
+        else if(cmd == "showItens"){
+            return "" + item.keys();
+        }
+        else if(cmd == "dadosItem"){
+            return item.get(ui[1])->toStringItem();
+        }
+        else if(cmd == "addHeroi"){
+            heroi.add(ui[1], Heroi(ui[1], Int(ui[2])));
         }
         else if(cmd == "showHerois"){
             return "" + heroi.keys();
         }
-        else if(cmd == "showItens"){
-            return "" + item.keys();
+        else if(cmd == "dadosHeroi"){
+            return heroi.get(ui[1])->toStringHeroi();
+        }
+        else if(cmd == "farmar"){
+            return heroi.get(ui[1])->farmar();
+        }
+        else if(cmd == "comprarItem"){
+            heroi.get(ui[1])->ComparItem(item.at(ui[2]));
         }
         else if(cmd == "fim")
             return "";
