@@ -14,17 +14,24 @@ dadosItem [nome]
 addHeroi [nome] [gold]
 showHerois
 dadosHeroi [nome]
+addTorre [id] [defesa]
+showTorres
+dadosTorre [id]
 farmar [nome_do_heroi]
 comprarItem [nome_do_heroi] [nome_do_item]
+atacarHeroi [nome_do_heroi] [nome_do_heroi_atacado]
+atacarTorre [nome_do_heroi] [id_torre]
+relacionarTorre [id_torre] [nome_do_heroi]
 fim
 )";
 
 class Dota : public Controller{
     Repository<Heroi> heroi;
     Repository<Item> item;
+    Repository<Torre> torre;
 
 public:
-    Dota(): heroi("heroi"), item("item"){
+    Dota(): heroi("heroi"), item("item"), torre("torre"){
     }
 
     string process(string line){
@@ -51,11 +58,29 @@ public:
         else if(cmd == "dadosHeroi"){
             return heroi.get(ui[1])->toStringHeroi();
         }
+        else if(cmd == "addTorre"){
+            torre.add(ui[1], Torre(Int(ui[1]), Int(ui[2])));
+        }
+        else if(cmd == "showTorres"){
+            return "" + torre.keys();
+        }
+        else if(cmd == "dadosTorre"){
+            return torre.get(ui[1])->toStringTorre();
+        }
         else if(cmd == "farmar"){
             return heroi.get(ui[1])->farmar();
         }
         else if(cmd == "comprarItem"){
             heroi.get(ui[1])->ComparItem(item.at(ui[2]));
+        }
+        else if(cmd == "atacarHeroi"){
+            heroi.get(ui[1])->atacarHeroi(heroi.get(ui[2]));
+        }
+        else if(cmd == "atacarTorre"){
+            heroi.get(ui[1])->atacarTorre(torre.get(ui[2]));
+        }
+        else if(cmd == "relacionarTorre"){
+            torre.get(ui[1])->addHeroi(heroi.get(ui[2]));
         }
         else if(cmd == "fim")
             return "";
