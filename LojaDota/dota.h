@@ -154,8 +154,8 @@ public:
         if(i->getDano() > this->dano)
             setVida(this->vida - (i->getDano())/2);
         if(i->getVida() < 0){
-            throw string("Heroi nao resistiu ao ataque\n");
             i->setVivo(false);
+            throw string("Heroi nao resistiu ao ataque\n");
         }
     }
 

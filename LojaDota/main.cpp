@@ -8,21 +8,42 @@ using namespace std;
 using namespace poo;
 
 string HELP = R"(help
-addItem [nome] [valor]
-showItens
-dadosItem [nome]
-addHeroi [nome] [gold]
-showHerois
-dadosHeroi [nome]
-addTorre [id] [defesa]
-showTorres
-dadosTorre [id]
-farmar [nome_do_heroi]
-comprarItem [nome_do_heroi] [nome_do_item]
-atacarHeroi [nome_do_heroi] [nome_do_heroi_atacado]
-atacarTorre [nome_do_heroi] [id_torre]
-relacionarTorre [id_torre] [nome_do_heroi]
-fim
+****************************************************************
+*                    MENU DE COMANDOS                          *
+*                        DotA 2                                *
+****************************************************************
+* COMANDO:        *    PARÂMETRO:                              *
+****************************************************************
+* addItem         *   [nome] [valor]                           *
+****************************************************************
+* showItens       *                                            *
+****************************************************************
+* dadosItem       *   [nome]                                   *
+****************************************************************
+* addHeroi        *   [nome] [gold]                            *
+****************************************************************
+* showHerois      *                                            *
+****************************************************************
+* dadosHeroi      *   [nome]                                   *
+****************************************************************
+* addTorre        *   [id] [defesa]                            *
+****************************************************************
+* showTorres      *                                            *
+****************************************************************
+* dadosTorre      *   [id]                                     *
+****************************************************************
+* farmar          *   [nome_do_heroi]                          *
+****************************************************************
+* comprarItem     *   [nome_do_heroi] [nome_do_item]           *
+****************************************************************
+* atacarHeroi     *   [nome_do_heroi] [nome_do_heroi_atacado]  *
+****************************************************************
+* atacarTorre     *   [nome_do_heroi] [id_torre]               *
+****************************************************************
+* relacionarTorre *  [id_torre] [nome_do_heroi]                *
+****************************************************************
+* fim             *                                            *
+****************************************************************
 )";
 
 class Dota : public Controller{
