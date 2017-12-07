@@ -1,0 +1,12 @@
+addItem Tango 50
+addItem Manga 70
+addItem Yasha 100
+addHeroi Axe 100
+addHeroi Lina 70
+addHeroi Luna 40
+addTorre 1 500
+addTorre 2 600
+addTorre 3 800
+comprarItem Axe Tango
+relacionarTorre 1 Axe
+
