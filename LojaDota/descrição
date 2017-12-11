@@ -1,0 +1,99 @@
+---
+layout: post
+title:  "Dota2"
+---
+Funcionalidades:
+
+PS.: get, sets, toString deverá ser feito de todos (heroi, itens e torres).
+
+- Adicionar herói passando seu nome e ouro inicial
+- Mostrar os dados do heroi passando seu nome como parâmetro
+  - Dados: nome, status (se está vivo ou morto), seu valor de vida, seu valor de dano e os seus itens e suas torres.
+- Adicionar itens passando nome e valor como parâmetros.
+  - Os itens são adicionados de forma que nunca se esgotem;
+  - Itens possuem um valor de pontosVida e pontosDano, que quando o heroi comprar o item esses pontos deverão ser adicionados ao heroi.
+- Os pontos de vida e dano dos herois e dos itens, pode ser um valor rand.
+
+```
+addHeroi Lina 100
+  done
+addUser Axe 80
+  done
+showHerois
+  [Axe] [Lina]
+addItem Escudo 25
+  done
+addItem Espada 50
+  done
+showItens
+  [Escudo][Espada]
+dadosHeroi Axe
+  .Nome do Heroi: Axe | Seu Gold: 80
+  .Status: 1
+  .Vida: 233 | Dano: 61
+  .Itens:
+  .Torres do Heroi:
+dadosItem Escudo
+  .Nome: Escudo | Valor: 25
+  .pVida: 55 | pDano: 43
+
+
+```
+O heroi poderá:
+
+- Comprar algum item, passando o heroi e o item como parâmetro;
+  - Se o heroi estiver morto, deve ser informado e não poderá comprar o item.
+  - Se o heroi estiver vivo, será verificado se ele possui gold suficiente para comprar. Se sim, o valor de gold diminuirá na proporção do valor do item e a aquisição será adicionada ao vetor de itens. Se não tiver gold suficiente, deverá ser informado.
+ele não poderá comprar um item que já possui.
+  - Quando comprado o item, os pontos de vida e dado do item seram somados para o heroi.
+- Farmar (acumular ouro)
+  - Deve ser verificado se o heroi está vivo. Caso não esteja, deve ser informado e ele não poderá famar.
+  - Caso ele esteja vivo, ele acumulará 50 de outro mais um número aleatório até 50.
+- Atacar outro heroi, passando o heroi que irá atacar e o que será atacado como parâmetro;
+  - Só poderá atacar outro heroi se os dois estiverem vivos.
+  - Caso ocorra o ataque, a vida do heroi atacado subtrai do dano que sofreu.
+  - Pode ainda existir a chance do contra ataque, que é quando o heroi atacado tem um dano mais alto que o heroi que atacou, assim o heroi que atacou sofrerá metade do dano do heroi que foi atacado.
+- Atacar uma torre, passando ela como parâmetro
+  - Deve ser verifIcado se a torre ainda está de pé e se o heroi ainda está vivo. Se os dois casos não acontecerem, deve ser informado.
+  - Caso contrário, a defesa da torre será diminuído proporcionalmente ao dano do heroi. Deverá ser informado quando ela cair e seu status mudará.
+
+```
+comprarItem Axe Escudo
+  done
+farmar Axe
+  .Axe farmou 99, Agora seu gold é de: 154.
+atacarHeroi Lina Axe
+  done
+atacarTorre Axe 1
+  done
+
+```
+Uma Torre poderá:
+- A torre terá um id(int) e uma defesa(int).
+- Aliar-se a um heroi
+- Mostrar os herois que estão relacionados a ela
+- Mostrar seu id o qual será um número, status (se ainda está de pé ou não) e os herois aliados a ela.
+
+```
+addTorre 1 500
+  done
+relacionarTorre 1 Lina
+  done
+showTorres
+  [1]
+dadosTorre 1
+  .Torre: 1 | Defesa: 500
+  .Status: 1
+  .Herois da Torres:
+  .Lina
+
+
+```
+
+## Diagrama de Classes
+
+![](https://github.com/Iuryqs/POO/blob/master/LojaDota/Diagrama/diagrama.jpg)
+
+
+## Créditos
+Projeto criado e implementado pelos alunos: Iury Queiros, Rafaella Fernandes.
