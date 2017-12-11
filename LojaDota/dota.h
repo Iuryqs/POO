@@ -147,7 +147,7 @@ public:
 
     void atacarHeroi(Heroi* i){
         if(this->vivo == false)
-            throw string("Não pode comprar item, o heroi está morto\n");
+            throw string("Não pode atacar, o heroi está morto\n");
         if(i->getVivo() == false)
             throw string("Não se pode atacar um heroi morto\n");
         i->setVida(i->getVida() - this->dano);

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>470</x>
+      <y>60</y>
+      <w>270</w>
+      <h>410</h>
+    </coordinates>
+    <panel_attributes>Heroi
+--
+- nome : String
+- gold : Int
+- vida : Int
+- dano : Int
+- vivo : Bool
+- item : vector&lt;Item&gt;
+- torres : vector &lt;*Torre&gt;
+--
++ getTorres() : vector &lt;*Torre&gt;
++ getGold () : int
++ setGold (g : int) : void
++ getVida () : int
++ setVida (v : int) : void
++ getVivo () : bool
++ setVivo (v : bool) : void
++ getDano () : int
++ setDano (d : int) : void
++ getNome () : string
++ ComprarItem (i : Item) : void
++ farmar () : string
++ atacarHeroi (i : Heroi*)
++ toStringHeroi() : string
++ addTorres (torre : Torre*) : void
++ atacarTorre (torre : Torre*) : void
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>180</x>
+      <y>60</y>
+      <w>280</w>
+      <h>250</h>
+    </coordinates>
+    <panel_attributes>Item
+--
+- nome : String
+- valor : Int
+- pVida : Int
+- pDano : Int
+--
++ getNome () : Int
++ getpVida () : Int
++ setpVida (p : int) : Void
++ getpDano () : Int
++ setpDano (p : int) : Void
++ getValor () : Int
++ setValor (v : int) : Void
++ toString Item () : String
+
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>180</x>
+      <y>320</y>
+      <w>280</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>Torre
+--
+- herois : Vector&lt;Heroi*&gt;
+- id : Int
+- defesa: Int
+- emPe : Bool
+--
++ getId () : int
++ getemPe () : bool
++ getDefesa () : int
++ setDefesa (d : int) : void
++ setemPe (p : bool) : void
++ toStringTorre : string
++ getHerois () : vector &lt;Heroi*&gt;
++ addHeroi (heroi : Heroi*) : void
+
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
